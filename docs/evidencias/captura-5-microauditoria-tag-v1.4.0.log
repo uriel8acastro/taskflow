@@ -1,0 +1,39 @@
+===== tag v1.4.0 =====
+v1.4.0          LB-01 / v1.4.0 — línea base inicial
+
+===== metadata del tag =====
+object 221e25679b44e3d22792d44e66fc00df19d16dbb
+type commit
+tag v1.4.0
+tagger uriel8acastro <uriel8acastro@gmail.com> 1789000164 -0500
+
+LB-01 / v1.4.0 — línea base inicial
+
+===== commit objetivo =====
+221e25679b44e3d22792d44e66fc00df19d16dbb
+221e256 LB-01 / v1.4.0: npm ci, npm test, app ejecutada, SCMP y SBOM aprobados
+
+===== archivos incluidos en el tag =====
+backend/db.js
+backend/package.json
+backend/package-lock.json
+backend/server.js
+backend/tests/api.test.js
+CHANGELOG.md
+.dockerignore
+docs/SCMP.md
+frontend/app.js
+frontend/index.html
+frontend/style.css
+.github/workflows/ci-cd.yml
+.gitignore
+GUIA_ESTRUCTURA_TASKFLOW.md
+infra/docker-compose.yml
+infra/Dockerfile
+LIVE-DEMO-SCRIPT.md
+migrations/0001_init.sql
+NOTAS_EDICION.md
+README.md
+
+===== exclusiones verificadas (node_modules/data/*.db) =====
+(ninguno - exclusiones respetadas)

@@ -1,0 +1,13 @@
+===== npm ci =====
+added 391 packages, and audited 392 packages in 3s
+===== npm test =====
+    ✓ DELETE /api/tasks/:id elimina una tarea (2 ms)
+    ✓ POST /api/tasks sin title responde 400 (1 ms)
+
+Test Suites: 1 passed, 1 total
+Tests:       6 passed, 6 total
+Snapshots:   0 total
+Time:        0.295 s
+Ran all test suites.
+===== version (health) =====
+{"status":"ok","version":"1.4.0"}

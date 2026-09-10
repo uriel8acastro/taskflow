@@ -1,0 +1,19 @@
+# CI: taskflow-infra
+# Uso: desde la raíz del proyecto -> docker compose -f infra/docker-compose.yml up --build
+services:
+  taskflow:
+    build:
+      context: ..
+      dockerfile: infra/Dockerfile
+      args:
+        # Debe coincidir con "engines.node" de backend/package.json
+        NODE_VERSION: ${NODE_VERSION:-24}
+    ports:
+      - "3000:3000"
+    volumes:
+      - taskflow-data:/app/data
+    environment:
+      - PORT=3000
+
+volumes:
+  taskflow-data:

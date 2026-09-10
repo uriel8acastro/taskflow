@@ -1,6 +1,6 @@
 {
   "name": "taskflow-api",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "description": "API backend de TaskFlow — CI: taskflow-api",
   "main": "server.js",
   "engines": {

@@ -21,7 +21,7 @@ Este plan controla TaskFlow durante las Unidades 3 y 4. La línea base inicial e
 | API | `backend/server.js`, `backend/db.js`, `backend/tests/api.test.js` | Rama, PR y pruebas |
 | Interfaz | `frontend/app.js`, `frontend/index.html`, `frontend/style.css` | Validación funcional y PR |
 | Dependencias | `backend/package.json`, `backend/package-lock.json` | npm ci y SBOM |
-| Esquema | `migrations/0001_init.sql` | Migraciones SQL numeradas |
+| Esquema | `migrations/0001_init.sql`, `migrations/0002_add_due_date.sql` | Migraciones SQL numeradas |
 | Infraestructura | `infra/Dockerfile`, `infra/docker-compose.yml` | Dockerfile y Compose versionados |
 | Automatización | `.github/workflows/ci-cd.yml` | Pipeline verde |
 | Evidencias | `docs/evidencias/` (SBOM y ficha por versión) | SBOM y ficha por versión |
@@ -44,6 +44,8 @@ Este plan controla TaskFlow durante las Unidades 3 y 4. La línea base inicial e
  
 ## 5. Línea base
 - LB-01 / v1.4.0: npm ci, npm test, app ejecutada, SCMP y SBOM aprobados.
+- LB-02 / v1.5.0: SBOM v1.5.0 generado y registrado en docs/evidencias/.
+- LB-03 / v1.6.0: npm ci, npm test (8/8 verdes) y SBOM v1.6.0 generado (TASKFLOW-101, rama feature/fecha-limite).
  
 ## 6. Exclusiones
 No versionar node_modules/, data/, *.db, secretos, tokens ni archivos personales.

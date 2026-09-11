@@ -14,6 +14,17 @@ app.use(express.json());
 // Sirve el frontend estático (para simplificar la demo, un solo contenedor)
 app.use(express.static(path.join(__dirname, '..', 'frontend')));
 
+
+function isValidDueDate(value) {
+  if (value === undefined || value === null || value === '') return true;
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) return false;
+  const [y, m, d] = value.split('-').map(Number);
+  const date = new Date(Date.UTC(y, m - 1, d));
+  return date.getUTCFullYear() === y &&
+    date.getUTCMonth() === m - 1 && date.getUTCDate() === d;
+}
+
+
 // --- Health check: útil para el smoke test del pipeline CI/CD ---
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', version: pkg.version });
@@ -27,16 +38,17 @@ app.get('/api/tasks', (req, res) => {
 
 // --- Crear tarea ---
 app.post('/api/tasks', (req, res) => {
-  const { title } = req.body;
+  const { title, due_date = null } = req.body;
   if (!title || typeof title !== 'string' || !title.trim()) {
-    return res.status(400).json({ error: 'El campo "title" es requerido.' });
+    return res.status(400).json({ error: 'El campo title es requerido.' });
   }
-  const result = db
-    .prepare('INSERT INTO tasks (title) VALUES (?)')
-    .run(title.trim());
-  const task = db
-    .prepare('SELECT * FROM tasks WHERE id = ?')
-    .get(result.lastInsertRowid);
+  if (!isValidDueDate(due_date)) {
+    return res.status(400).json({ error: 'due_date debe usar YYYY-MM-DD.' });
+  }
+  const result = db.prepare(
+    'INSERT INTO tasks (title, due_date) VALUES (?, ?)'
+  ).run(title.trim(), due_date || null);
+  const task = db.prepare('SELECT * FROM tasks WHERE id = ?').get(result.lastInsertRowid);
   res.status(201).json(task);
 });
 
@@ -46,15 +58,23 @@ app.put('/api/tasks/:id', (req, res) => {
   const existing = db.prepare('SELECT * FROM tasks WHERE id = ?').get(id);
   if (!existing) return res.status(404).json({ error: 'Tarea no encontrada.' });
 
-  const title = req.body.title ?? existing.title;
+  if (req.body.title !== undefined &&
+      (typeof req.body.title !== 'string' || !req.body.title.trim())) {
+    return res.status(400).json({ error: 'El campo "title" es requerido.' });
+  }
+  const title = req.body.title !== undefined ? req.body.title.trim() : existing.title;
+
   const completed =
     req.body.completed !== undefined ? (req.body.completed ? 1 : 0) : existing.completed;
+  const dueDate = req.body.due_date !== undefined
+    ? (req.body.due_date || null) : existing.due_date;
+  if (!isValidDueDate(dueDate))
+    return res.status(400).json({ error: 'due_date debe usar YYYY-MM-DD.' });
 
-  db.prepare('UPDATE tasks SET title = ?, completed = ? WHERE id = ?').run(
-    title,
-    completed,
-    id
-  );
+  db.prepare(
+    'UPDATE tasks SET title = ?, completed = ?, due_date = ? WHERE id = ?'
+  ).run(title, completed, dueDate, id);
+
   const updated = db.prepare('SELECT * FROM tasks WHERE id = ?').get(id);
   res.json(updated);
 });

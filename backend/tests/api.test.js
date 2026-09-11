@@ -59,4 +59,19 @@ describe('TaskFlow API', () => {
     const res = await request(app).post('/api/tasks').send({});
     expect(res.status).toBe(400);
   });
+
+  test('POST crea tarea con due_date opcional', async () => {
+    const res = await request(app).post('/api/tasks').send({
+      title: 'Preparar release', due_date: '2026-09-15'
+    });
+    expect(res.status).toBe(201);
+    expect(res.body.due_date).toBe('2026-09-15');
+  });
+  test('POST rechaza due_date inválida', async () => {
+    const res = await request(app).post('/api/tasks').send({
+      title: 'Fecha inválida', due_date: '15/09/2026'
+    });
+    expect(res.status).toBe(400);
+  });
+  
 });
